@@ -12,10 +12,22 @@ router.get('/add-product', (req, res, next) => {
   //   '<form action="/admin/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>'
   // );
   // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
+
+  // PUG Files render
+  // res.render('add-product', {
+  //   prods: products,
+  //   pageTitle: 'Add product',
+  //   path: '/admin/add-product',
+  // });
+
+  // HBS Files render
   res.render('add-product', {
     prods: products,
     pageTitle: 'Add product',
     path: '/admin/add-product',
+    activeProduct: true,
+    formCSS: true,
+    productCSS: true,
   });
 });
 
