@@ -1,4 +1,5 @@
 const path = require('path');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -7,6 +8,8 @@ const errorController = require('./controllers/error');
 const app = express();
 
 app.set('view engine', 'ejs');
+// this indicate the folder for the views is "views", you can change it and rename the folder
+app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
