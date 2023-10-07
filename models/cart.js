@@ -33,6 +33,7 @@ module.exports = class Cart {
       });
     });
   }
+
   static deleteProduct(id, productPrice) {
     fs.readFile(p, (err, fileContent) => {
       if (err) return;
@@ -46,6 +47,17 @@ module.exports = class Cart {
       fs.writeFile(p, JSON.stringify(updatedCart), (err) => {
         console.log(err);
       });
+    });
+  }
+
+  static getCart(cb) {
+    fs.readFile(p, (err, fileContent) => {
+      const cart = JSON.parse(fileContent);
+      if (err) {
+        cb(null);
+      } else {
+        cb(cart);
+      }
     });
   }
 };
