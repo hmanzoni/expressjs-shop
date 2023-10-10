@@ -1,6 +1,6 @@
-const fs = require('fs');
 const path = require('path');
 const Cart = require('./cart');
+const fileHandler = require('../util/fileHandler');
 
 const p = path.join(
   path.dirname(require.main.filename),
@@ -9,7 +9,7 @@ const p = path.join(
 );
 
 const getProductsFromFile = (cb) => {
-  fs.readFile(p, (err, fileContent) => {
+  fileHandler.getFile(p, (err, fileContent) => {
     if (err) return cb([]);
     return cb(JSON.parse(fileContent));
   });
@@ -32,15 +32,11 @@ module.exports = class Product {
         );
         const updatedProds = [...products];
         updatedProds[existingProdIndex] = this;
-        fs.writeFile(p, JSON.stringify(updatedProds), (err) => {
-          console.log(err);
-        });
+        fileHandler.saveFile(p, updatedProds);
       } else {
         this.id = Math.random().toString();
         products.push(this);
-        fs.writeFile(p, JSON.stringify(products), (err) => {
-          console.log(err);
-        });
+        fileHandler.saveFile(p, products);
       }
     });
   }
@@ -49,8 +45,9 @@ module.exports = class Product {
     getProductsFromFile((products) => {
       const product = products.find((prod) => prod.id === id);
       const updatedProds = products.filter((prod) => prod.id !== id);
-      fs.writeFile(p, JSON.stringify(updatedProds), (err) => {
+      fileHandler.saveFile(p, updatedProds, (err, id) => {
         if (!err) {
+          console.log(id, product);
           Cart.deleteProduct(id, product.price);
         }
         console.log(err);

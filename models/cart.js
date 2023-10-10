@@ -1,12 +1,12 @@
-const fs = require('fs');
 const path = require('path');
+const fileHandler = require('../util/fileHandler');
 
 const p = path.join(path.dirname(require.main.filename), 'data', 'cart.json');
 
 module.exports = class Cart {
   static addProduct(id, productPrice) {
     // fetch the previous cart
-    fs.readFile(p, (err, fileContent) => {
+    fileHandler.getFile(p, (err, fileContent) => {
       let cart = { products: [], totalPrice: 0 };
       if (!err) {
         cart = JSON.parse(fileContent);
@@ -28,14 +28,12 @@ module.exports = class Cart {
         cart.products = [...cart.products, updatedProd];
       }
       cart.totalPrice = cart.totalPrice + +productPrice;
-      fs.writeFile(p, JSON.stringify(cart), (err) => {
-        console.log(err);
-      });
+      fileHandler.saveFile(p, cart);
     });
   }
 
   static deleteProduct(id, productPrice) {
-    fs.readFile(p, (err, fileContent) => {
+    fileHandler.getFile(p, (err, fileContent) => {
       if (err) return;
 
       const updatedCart = { ...JSON.parse(fileContent) };
@@ -48,14 +46,12 @@ module.exports = class Cart {
         (prod) => prod.id !== id
       );
       updatedCart.totalPrice -= productPrice * productQty;
-      fs.writeFile(p, JSON.stringify(updatedCart), (err) => {
-        console.log(err);
-      });
+      fileHandler.saveFile(p, updatedCart);
     });
   }
 
   static getCart(cb) {
-    fs.readFile(p, (err, fileContent) => {
+    fileHandler.getFile(p, (err, fileContent) => {
       const cart = JSON.parse(fileContent);
       if (err) {
         cb(null);
