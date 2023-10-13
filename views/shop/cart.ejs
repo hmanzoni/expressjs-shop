@@ -1,4 +1,5 @@
 <%- include('../includes/head.ejs') %>
+    <!-- <link rel="stylesheet" href="/css/cart.css"> -->
     </head>
 
     <body>
@@ -8,9 +9,10 @@
                 <ul class="cart__item-list">
                     <% products.forEach(prod => { %>
                         <li class="cart__item">
-                            <p><%= prod.title %> (<%= prod.cartItem.quantity %>)</p>
+                            <h1><%= prod.title %></h1>
+                            <h2><%= prod.quantity %></h2>
                             <form action="/cart-delete-item" method="post">
-                                <input type="hidden" name="productId" value="<%= prod.id %>">
+                                <input type="hidden" name="productId" value="<%= prod._id %>">
                                 <button class="btn danger" type="submit">Delete</button>
                             </form>
                         </li>
