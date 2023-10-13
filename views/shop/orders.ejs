@@ -7,10 +7,10 @@
             <ul class="cart__item-list">
             <% orders.forEach(order => { %>
                 <li class="cart__item">
-                    <p><%= order.id %></p>
+                    <p>Order #<%= order._id %></p>
                     <ul>
-                        <% order.products.forEach(product => { %>
-                            <li><%= product.title %> (<%= product.orderItem.quantity %>)</li>
+                        <% order.items.forEach(product => { %>
+                            <li><%= product.title %> (<%= product.quantity %>)</li>
                         <% }) %>
                     </ul>
                 </li>
