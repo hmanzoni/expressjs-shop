@@ -19,14 +19,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  // const hugo = new User('Hugo', 'hugo@test.com');
-  // hugo.save();
-  User.findById('6529bb7ca978657c01589dae')
-    .then((usr) => {
-      req.user = new User(usr.name, usr.email, usr.cart, usr._id);
-      next();
-    })
-    .catch((err) => console.log(err));
+  User.findOne().then((usr) => {
+    if (!usr) {
+      const firstUser = new User({
+        name: 'Hugo',
+        email: 'hugo@test.com',
+        cart: { items: [] },
+      });
+      firstUser.save().then((newUsr) => (req.user = newUsr));
+    } else {
+      req.user = usr;
+    }
+    next();
+  });
 });
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

@@ -1,15 +1,12 @@
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
-
-let _db;
+const mongoose = require('mongoose');
 
 const mongoConnect = (callback) => {
-  MongoClient.connect(
-    'mongodb+srv://nodeCourse:rG6lt680UwxFJ7YR@cluster0.wskuosz.mongodb.net/?retryWrites=true&w=majority'
-  )
+  mongoose
+    .connect(
+      'mongodb+srv://nodeCourse:rG6lt680UwxFJ7YR@cluster0.wskuosz.mongodb.net/?retryWrites=true&w=majority'
+    )
     .then((client) => {
       console.log('Connected!');
-      _db = client.db();
       callback();
     })
     .catch((err) => {
@@ -18,13 +15,4 @@ const mongoConnect = (callback) => {
     });
 };
 
-const getDb = () => {
-  if (_db) {
-    return _db;
-  } else {
-    throw 'No database found!';
-  }
-};
-
 exports.mongoConnect = mongoConnect;
-exports.getDb = getDb;
