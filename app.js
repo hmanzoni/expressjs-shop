@@ -6,7 +6,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./util/database').mongoConnect;
+const mongoConnect = require('./util/database');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
@@ -15,7 +15,7 @@ const User = require('./models/user');
 const app = express();
 
 const store = new MongoDBStore({
-  uri: MONGODB_URI,
+  uri: mongoConnect.MONGODB_URI,
   collection: 'sessions',
 });
 
@@ -69,4 +69,4 @@ app.use(authRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(() => app.listen(3000));
+mongoConnect.mongoConnect(() => app.listen(3000));
