@@ -36,22 +36,6 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  User.findOne().then((usr) => {
-    if (!usr) {
-      const firstUser = new User({
-        name: 'Hugo',
-        email: 'hugo@test.com',
-        cart: { items: [] },
-      });
-      firstUser.save().then((newUsr) => (req.user = newUsr));
-    } else {
-      req.user = usr;
-    }
-    next();
-  });
-});
-
-app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
