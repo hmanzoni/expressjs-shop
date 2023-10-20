@@ -164,3 +164,25 @@ exports.postReset = (req, res, next) => {
       .catch((err) => console.log(err));
   });
 };
+
+exports.getNewPass = (req, res, next) => {
+  const token = req.params.token;
+  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Data.now() } })
+    .then((user) => {
+      let message = req.flash('error');
+      if (message.length > 0) {
+        message = message[0];
+      } else {
+        message = null;
+      }
+      res.render('auth/new-pass', {
+        path: '/new-pass',
+        pageTitle: 'New Pass',
+        errorMsg: message,
+        userId: user._id.toString(),
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.postNewPass = (req, res, next) => {};
