@@ -92,6 +92,7 @@ exports.postSignup = (req, res, next) => {
       pageTitle: 'Signup',
       errorMsg: errors.array()[0].msg,
       oldInput: { email, password, confirmPassword },
+      validationErrors: errors.array(),
     });
   }
   bcryptjs
