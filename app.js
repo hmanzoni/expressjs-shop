@@ -13,6 +13,7 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 const User = require('./models/user');
+const multer = require('multer');
 
 const app = express();
 
@@ -23,11 +24,21 @@ const store = new MongoDBStore({
 
 const csrfProtection = csurf();
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  },
+});
+
 app.set('view engine', 'ejs');
 // this indicate the folder for the views is "views", you can change it and rename the folder
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({ storage: fileStorage }).single('imageFile'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
