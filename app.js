@@ -33,12 +33,26 @@ const fileStorage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 app.set('view engine', 'ejs');
 // this indicate the folder for the views is "views", you can change it and rename the folder
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ storage: fileStorage }).single('imageFile'));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('imageFile')
+);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
