@@ -13,12 +13,29 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-  const { title, imageUrl, price, description } = req.body;
+  const { title, price, description } = req.body;
+  const imageFile = req.file;
+  if (!imageFile) {
+    return res.status(422).render('admin/edit-product', {
+      pageTitle: 'Add Product',
+      path: '/admin/add-product',
+      editing: false,
+      hasError: true,
+      errorMsg: 'Attached file is not an image',
+      validationErrors: [],
+      product: {
+        title,
+        price,
+        description,
+      },
+    });
+  }
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Add Product',
-      path: '/admin/edit-product',
+      path: '/admin/add-product',
       editing: false,
       hasError: true,
       errorMsg: errors.array()[0].msg,
@@ -27,7 +44,7 @@ exports.postAddProduct = (req, res, next) => {
         title,
         price,
         description,
-        imageUrl,
+        image: imageFile.path,
       },
     });
   }
@@ -35,7 +52,7 @@ exports.postAddProduct = (req, res, next) => {
     title,
     price,
     description,
-    imageUrl,
+    image: imageFile.path,
     userId: req.user._id,
   });
   product
@@ -80,7 +97,8 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  const { productId, title, imageUrl, price, description } = req.body;
+  const { productId, title, price, description } = req.body;
+  const imageFile = req.file;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-product', {
@@ -94,7 +112,7 @@ exports.postEditProduct = (req, res, next) => {
         title,
         price,
         description,
-        imageUrl,
+        image: imageFile.path,
         _id: productId,
       },
     });
@@ -105,7 +123,9 @@ exports.postEditProduct = (req, res, next) => {
         return res.redirect('/');
       }
       product.title = title;
-      product.imageUrl = imageUrl;
+      if (imageFile) {
+        product.image = imageFile.path;
+      }
       product.price = price;
       product.description = description;
       return product.save().then((result) => {
