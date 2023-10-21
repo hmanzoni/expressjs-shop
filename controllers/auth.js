@@ -26,6 +26,7 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     errorMsg: message,
+    oldInput: { email: null, password: null },
   });
 };
 
@@ -52,13 +53,20 @@ exports.postLogin = (req, res, next) => {
       path: '/login',
       pageTitle: 'login',
       errorMsg: errors.array()[0].msg,
+      oldInput: { email, password },
     });
   }
   User.findOne({ email })
     .then((usr) => {
       if (!usr) {
-        req.flash('error', 'Invalid email or password.');
-        return res.redirect('/login');
+        // req.flash('error', 'Invalid email or password.');
+        // return res.redirect('/login');
+        return res.render('auth/login', {
+          path: '/login',
+          pageTitle: 'login',
+          errorMsg: 'Invalid email or password.',
+          oldInput: { email, password },
+        });
       }
       bcryptjs
         .compare(password, usr.password)
@@ -68,12 +76,24 @@ exports.postLogin = (req, res, next) => {
             req.session.user = usr;
             return req.session.save((err) => {
               console.log(err);
-              req.flash('error', 'Invalid email or password.');
-              res.redirect('/login');
+              // req.flash('error', 'Invalid email or password.');
+              // res.redirect('/login');
+              return res.render('auth/login', {
+                path: '/login',
+                pageTitle: 'login',
+                errorMsg: 'Invalid email or password.',
+                oldInput: { email, password },
+              });
             });
           }
-          req.flash('error', 'Invalid email or password.');
-          res.redirect('/login');
+          // req.flash('error', 'Invalid email or password.');
+          // res.redirect('/login');
+          return res.render('auth/login', {
+            path: '/login',
+            pageTitle: 'login',
+            errorMsg: 'Invalid email or password.',
+            oldInput: { email, password },
+          });
         })
         .catch((err) => {
           console.log(err);
