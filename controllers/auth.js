@@ -40,6 +40,7 @@ exports.getSignup = (req, res, next) => {
     path: '/signup',
     pageTitle: 'Signup',
     errorMsg: message,
+    oldInput: { email: null, password: null, confirmPassword: null },
   });
 };
 
@@ -83,13 +84,14 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.postSignup = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, confirmPassword } = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Signup',
       errorMsg: errors.array()[0].msg,
+      oldInput: { email, password, confirmPassword },
     });
   }
   bcryptjs
