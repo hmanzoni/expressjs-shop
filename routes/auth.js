@@ -17,7 +17,10 @@ router.get('/reset/:token', authController.getNewPass);
 router.post(
   '/login',
   [
-    body('email').isEmail().withMessage('Please enter a valid email.'),
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email.')
+      .normalizeEmail(),
     body('password', 'Password must be valid.')
       .isLength({ min: 5 })
       .isAlphanumeric(),
@@ -31,6 +34,7 @@ router.post(
     check('email')
       .isEmail()
       .withMessage('Please enter a valid email.')
+      .normalizeEmail()
       .custom((value, { req }) => {
         return User.findOne({ email: value }).then((usr) => {
           if (usr) {
