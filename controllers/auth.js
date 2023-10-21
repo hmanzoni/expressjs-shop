@@ -101,7 +101,12 @@ exports.postLogin = (req, res, next) => {
           return res.redirect('/signup');
         });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -135,9 +140,19 @@ exports.postSignup = (req, res, next) => {
           subject: 'Singup succeeded!',
           html: '<h1>You successfully signed up!</h1>',
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          return next(error);
+        });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postLogout = (req, res, next) => {
@@ -190,9 +205,19 @@ exports.postReset = (req, res, next) => {
           <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new pass</p>
           `,
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+          });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   });
 };
 
@@ -214,7 +239,12 @@ exports.getNewPass = (req, res, next) => {
         userId: user._id.toString(),
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postNewPass = (req, res, next) => {
@@ -239,5 +269,10 @@ exports.postNewPass = (req, res, next) => {
         })
         .then((result) => res.redirect('/login'));
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
