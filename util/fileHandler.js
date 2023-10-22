@@ -8,6 +8,12 @@ exports.getFile = (path, cb) => {
   fs.readFile(path, cb);
 };
 
+exports.deleteFile = (filePath) => {
+  fs.unlink(filePath, (err) => {
+    if (err) throw err;
+  });
+};
+
 function errorPrint(err) {
   console.log(err);
 }
