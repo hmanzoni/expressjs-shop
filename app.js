@@ -58,7 +58,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(
   session({
-    secret: 'my secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -113,4 +113,4 @@ app.use((error, req, res, next) => {
   });
 });
 
-mongoConnect.mongoConnect(() => app.listen(3000));
+mongoConnect.mongoConnect(() => app.listen(process.env.PORT || 3000));
