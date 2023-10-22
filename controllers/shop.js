@@ -143,6 +143,16 @@ exports.createOrder = (req, res, next) => {
 
 exports.getInvoice = (req, res, next) => {
   const { orderId } = req.params;
+  Order.findById(orderId)
+    .then((order) => {
+      if (!order) {
+        return next(new Error('No order found.'));
+      }
+      if (order.user.userId.toString() !== req.user._id.toString()) {
+        return next(new Error('Unauthorized'));
+      }
+    })
+    .catch((err) => next(err));
   const invoiceName = 'invoice-' + orderId + '.pdf';
   const invoicePath = path.join('data', 'invoices', invoiceName);
   fs.readFile(invoicePath, (err, data) => {
