@@ -75,15 +75,13 @@ exports.postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             req.session.user = usr;
             return req.session.save((err) => {
-              console.log(err);
-              // req.flash('error', 'Invalid email or password.');
-              // res.redirect('/login');
-              return res.render('auth/login', {
-                path: '/login',
-                pageTitle: 'login',
-                errorMsg: 'Invalid email or password.',
-                oldInput: { email, password },
-              });
+              if (err) {
+                console.log(err);
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+              }
+              res.redirect('/');
             });
           }
           // req.flash('error', 'Invalid email or password.');
