@@ -189,3 +189,28 @@ exports.postDeleteProduct = (req, res, next) => {
       return next(error);
     });
 };
+
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+  Product.findById(prodId)
+    .then((prod) => {
+      if (!prod) {
+        return next(new Error('Product not found.'));
+      }
+      deleteFile(prod.image);
+      return Product.deleteOne({ _id: prodId, userId: req.user._id });
+    })
+    .then(() => {
+      req.user
+        .deleteCartItem(prodId)
+        .then(() => {
+          res.status(200).json({ message: 'Success!' });
+        })
+        .catch((err) => {
+          res.status(500).json();
+        });
+    })
+    .catch((err) => {
+      res.status(500).json();
+    });
+};
