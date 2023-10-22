@@ -45,7 +45,6 @@ exports.postAddProduct = (req, res, next) => {
         title,
         price,
         description,
-        image: imageFile.path,
       },
     });
   }
@@ -60,7 +59,6 @@ exports.postAddProduct = (req, res, next) => {
     .save()
     .then((res) => console.log(res))
     .catch((err) => {
-      console.log(err);
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);

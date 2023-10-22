@@ -29,7 +29,7 @@ const fileStorage = multer.diskStorage({
     cb(null, 'images');
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + '-' + file.originalname);
+    cb(null, new Date().getTime() + '-' + file.originalname);
   },
 });
 
@@ -101,9 +101,15 @@ app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
   // res.redirect('/500');
+  // console.log('app.js', error);
+  let isAuth = false;
+  if (req.session && req.session.isLoggedIn) {
+    isAuth = req.session.isLoggedIn;
+  }
   res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',
+    isAuthenticated: isAuth,
   });
 });
 
