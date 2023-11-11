@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_CLUSTER_ID}/${process.env.MONGO_DEFAULT_DB}?retryWrites=true&w=majority`;
+// MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_CLUSTER_ID}/${process.env.MONGO_DEFAULT_DB}?retryWrites=true&w=majority`;
+MONGODB_URI = process.env.MONGO_URI;
 
 const mongoConnect = (callback) => {
   mongoose
