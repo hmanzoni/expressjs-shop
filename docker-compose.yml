@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  nodeshop:
+    container_name: nodeshop
+    image: hugocm/nodeshop:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
